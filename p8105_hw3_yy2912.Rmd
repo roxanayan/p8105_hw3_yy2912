@@ -1,0 +1,69 @@
+---
+title: "p8105_hw3_yy2912"
+output: github_document
+---
+```{r setup, include=FALSE}
+library(tidyverse)
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
+theme_set(theme_bw() + theme(legend.position = "bottom"))
+```
+
+#question 1: load instacart data 
+```{r}
+library(p8105.datasets)
+data("instacart")
+```
+There are `r nrow(instacart)` rows and `r ncol(instacart)` columns in data 'instacart'.
+There are `r nrow(distinct(instacart, aisle))` distinct aisel. 
+Some key variables include `r nrow(distinct(instacart, order_id))` distinct order_id and `r nrow(distinct(instacart, user_id))` distinct user_id.
+
+#question 1: how many aisles are there, and which aisles are the most items ordered from?
+```{r}
+numberof_aisle=
+instacart %>%
+  group_by(aisle) %>%
+  summarize(n=n())%>%
+  arrange(desc(n))
+```
+There are 134 aisles and most items are orderd from "fresh vegetables".
+
+#question 1: make a plot that shows the number of items ordered in each aisle, limiting this to aisles with more than 10000 items ordered
+```{r}
+plot_aisle =
+  numberof_aisle %>%
+  filter(n>10000)%>%
+  ggplot(aes(x=aisle, y=n))
+plot_aisle+geom_point()+theme(
+          legend.position="none") +
+  xlab("Aisle")+
+  ylab("The number of items ordered") +
+  ggtitle("The number of items ordered in each aisle")
+```
+
+#question 1: make a table showing the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”. Include the number of times each item is ordered in your table.
+```{r}
+popular_item=
+  instacart %>%
+  filter(aisle == c("baking ingredients","dog food care","packaged vegetables fruits"))%>%
+  group_by(aisle,product_name)%>%
+  summarize(
+    n = n()
+  ) %>% 
+    summarize(
+    rank=max(n))
+```
+
+#question 1: make a table showing the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week.
+```{r}
+mean_hour=
+  instacart %>%
+  filter(product_name==c("Pink Lady Apples","Coffee Ice Cream"))%>%
+  group_by(product_name, order_dow)%>%
+  summarize(mean_hour=mean(order_hour_of_day))
+```
