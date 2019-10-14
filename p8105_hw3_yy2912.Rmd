@@ -203,7 +203,7 @@ accel_data_tidy =
     weekend = as.numeric(weekend)
   )
 ```  
-The variables in the tidied dataset include: `r ls(accel_data_tidy)` and there are `r nrow(accel_data_tidy)` observations in the dataset.
+The variables in the tidied dataset include: `r ls(accel_data_tidy)` and there are `r nrow(accel_data_tidy)` observations in the dataset. Some key variables include week, day, and activity_minutes.
 
 #question 3: Using your tidied dataset, aggregate accross minutes to create a total activity variable for each day, and create a table showing these totals. Are any trends apparent?
 ```{r}
@@ -218,4 +218,22 @@ accel_data_tidy %>%
 
 There is not any apparent trend from the table generated. Each week has different activity minutes from Monday to Sunday. 
 
+#question 3: Make a single-panel plot that shows the 24-hour activity time courses for each day and use color to indicate day of the week. Describe in words any patterns or conclusions you can make based on this graph.
+```{r}
+accel_data_tidy %>%
+  group_by(day, activity) %>% 
+  summarize(
+    total_activity_minute = sum(activity_minutes)
+  ) %>% 
+  ggplot(aes(x = activity, y = total_activity_minute, color = day)) +
+  geom_point(alpha = .05)+
+  geom_smooth()+
+  theme(legend.position = "bottom") +
+	viridis::scale_fill_viridis(discrete = TRUE)+
+  labs(
+    title = "The 24-hour activity time courses for each day",
+    x = "Day",
+    y = "activity_total")
+  
+```
 
