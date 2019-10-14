@@ -216,9 +216,11 @@ accel_data_tidy %>%
   
 ```
 
+
 There is not any apparent trend from the table generated. Each week has different activity minutes from Monday to Sunday. 
 
 #question 3: Make a single-panel plot that shows the 24-hour activity time courses for each day and use color to indicate day of the week. Describe in words any patterns or conclusions you can make based on this graph.
+
 ```{r}
 accel_data_tidy %>%
   group_by(day, activity) %>% 
@@ -236,4 +238,6 @@ accel_data_tidy %>%
     y = "activity_total")
   
 ```
+
+Wednesday has the lowest total activity minutes among all days and total activity minutes of each day is bounded by different values (each day has different max total activity minutes).
 
